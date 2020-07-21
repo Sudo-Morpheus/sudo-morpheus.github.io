@@ -178,6 +178,12 @@ Search for Mallory’s username to find her phone number. Hint: You can use the 
 <p>I searched the key term, <em>mfa</em>. And since this scenario was similar to the previous question, I kept the sourcetype the same.</p>
 <p><code>index=“botsv3” earliest=0 sourcetype=“aws:cloudtrail” *mfa*</code></p>
 <p>The answer is among the resulting fields. Hint: It is related to mfa authentication.</p>
+<h3>
+<a id="challenge-203-1" class="anchor" href="#challenge-203-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 203:</h3>
+<p><em><strong>Bud accidentally makes an S3 bucket publicly accessible. What is the event ID of the API 2call that enabled public access? Answer guidance: Include any special characters/punctuation.</strong></em></p>
+<p>My first course of action was to find Bud’s account. I assumed it was either <em>bstoll</em> -&gt; “Bud Stoll” or <em>btun</em> -&gt; “Bud Tun”. After searching “Bud Stoll,” I confirmed his account was <em>bstoll</em>. Next, I had to find an event that would result in changing the accessibility of a bucket. I recalled <em>put events</em> were events that changed policies.</p>
+<p><code>index=“botsv3” earliest=0 bstoll eventName=put*</code></p>
+<p>The answer is one of the two resulting event IDs in the <em>eventID</em> field.</p>
 
       <footer class="site-footer">
 
