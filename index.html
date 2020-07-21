@@ -170,8 +170,14 @@ Search for Mallory’s username to find her phone number. Hint: You can use the 
 <a id="challenge-200-1" class="anchor" href="#challenge-200-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 200:</h3>
 <p><em><strong>List out the IAM users that accessed an AWS service (successfully or unsuccessfully) in Frothly's AWS environment? Answer guidance: Comma separated without spaces, in alphabetical order. (Example: ajackson,mjones,tmiller)</strong></em></p>
 <p>I wasn’t familiar with any key terms, so I searched for <em>AWS IAM users splunk</em> on Google. The search results indicated I should use <em>aws:cloudtrail</em> as the sourcetype for the search.</p>
-<p><code>index=“botsv3” earliest=0 sourcetype=“aws:cloudtrail”</code></p>
+<p><code>index=“botsv3” earliest=0 sourcetype=“aws:cloudtrail"</code></p>
 <p>I started scrolling through the resulting fields to find “user” or “username.” I found a field called <em>userIdentity.userName</em>, which contains the users we were looking for.</p>
+<h3>
+<a id="challenge-201-1" class="anchor" href="#challenge-201-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 201:</h3>
+<p><em><strong>What field would you use to alert that AWS API activity have occurred without MFA (multi-factor authentication)? Answer guidance: Provide the full JSON path. (Example: iceCream.flavors.traditional)</strong></em></p>
+<p>I searched the key term, <em>mfa</em>. And since this scenario was similar to the previous question, I kept the sourcetype the same.</p>
+<p><code>index=“botsv3” earliest=0 sourcetype=“aws:cloudtrail” *mfa*</code></p>
+<p>The answer is among the resulting fields. Hint: It is related to mfa authentication.</p>
 
       <footer class="site-footer">
 
