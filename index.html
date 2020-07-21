@@ -166,6 +166,12 @@ Search for Mallory’s username to find her phone number. Hint: You can use the 
 <a id="challenge-1-1" class="anchor" href="#challenge-1-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 1:</h3>
 <p><em><strong>This is a simple question to get you familiar with submitting answers. What is the name of the company that makes the software that you are using for this competition? Answer guidance: A six-letter word with no punctuation.</strong></em></p>
 <p>The name of the website that we are using to search for the answers.</p>
+<h3>
+<a id="challenge-200-1" class="anchor" href="#challenge-200-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 200:</h3>
+<p><em><strong>List out the IAM users that accessed an AWS service (successfully or unsuccessfully) in Frothly's AWS environment? Answer guidance: Comma separated without spaces, in alphabetical order. (Example: ajackson,mjones,tmiller)</strong></em></p>
+<p>I wasn’t familiar with any key terms, so I searched for <em>AWS IAM users splunk</em> on Google. The search results indicated I should use <em>aws:cloudtrail</em> as the sourcetype for the search.</p>
+<p>‘index=“botsv3” earliest=0 sourcetype=“aws:cloudtrail”’</p>
+<p>I started scrolling through the resulting fields to find “user” or “username.” I found a field called <em>userIdentity.userName</em>, which contains the users we were looking for.</p>
 
       <footer class="site-footer">
 
