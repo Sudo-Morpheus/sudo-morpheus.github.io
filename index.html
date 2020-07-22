@@ -184,6 +184,56 @@ Search for Mallory’s username to find her phone number. Hint: You can use the 
 <p>My first course of action was to find Bud’s account. I assumed it was either <em>bstoll</em> -&gt; “Bud Stoll” or <em>btun</em> -&gt; “Bud Tun”. After searching “Bud Stoll,” I confirmed his account was <em>bstoll</em>. Next, I had to find an event that would result in changing the accessibility of a bucket. I recalled <em>put events</em> were events that changed policies.</p>
 <p><code>index=“botsv3” earliest=0 bstoll eventName=put*</code></p>
 <p>The answer is one of the two resulting event IDs in the <em>eventID</em> field.</p>
+<h3>
+<a id="challenge-204-1" class="anchor" href="#challenge-204-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 204:</h3>
+<p><em><strong>What is the name of the S3 bucket that was made publicly accessible?</strong></em></p>
+<p>We already have the information needed thanks to the previous question. The answer is in the <em>requestParameters.bucketName</em> field.</p>
+<h3>
+<a id="challenge-205-1" class="anchor" href="#challenge-205-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 205:</h3>
+<p><em><strong>What is the name of the text file that was successfully uploaded into the S3 bucket while it was publicly accessible? Answer guidance: Provide just the file name and extension, not the full path. (Example: filename.docx instead of /mylogs/web/filename.docx)</strong></em></p>
+<p>Now that we know the bucket name, we can add that to the search along with the key word <em>.txt</em> for text files.</p>
+<p><code>index="botsv3" earliest=0 frothlywebcode *txt*</code></p>
+<p>I found the file while scrolling through the events.</p>
+<h3>
+<a id="challenge-219" class="anchor" href="#challenge-219" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 219:</h3>
+<p><em><strong>Bud accidentally commits AWS access keys to an external code repository. Shortly after, he receives a notification from AWS that the account had been compromised. What is the support case ID that Amazon opens on his behalf?</strong></em></p>
+<p>Because Bud receives a notification from AWS, I decided to search for an email from Amazon. I also decided to search a keyword, <em>access keys</em>.</p>
+<p>index="botsv3" earliest=0 sourcetype=”stream:smtp” access keys</p>
+<p>As I was scrolling through the fields, I found one called <em>content body</em>, which contained the email amazon sent and the answer we are looking for.</p>
+<h3>
+<a id="challenge-220" class="anchor" href="#challenge-220" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 220:</h3>
+<p><em><strong>AWS access keys consist of two parts: an access key ID (e.g., AKIAIOSFODNN7EXAMPLE) and a secret access key (e.g., wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY). What is the secret access key of the key that was leaked to the external code repository?</strong></em></p>
+<p>The answer to this question is also in the email from the previous search/question. There is a link that leads you to a site with the answer.</p>
+<h3>
+<a id="challenge-221" class="anchor" href="#challenge-221" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 221:</h3>
+<p><em><strong>Using the leaked key, the adversary makes an unauthorized attempt to create a key for a specific resource. What is the name of that resource? Answer guidance: One word.</strong></em></p>
+<p>Once again, the answer from the previous question helped me search for the answer to this question. I add the leaked access key that I found to the search.</p>
+<p>index=botsv3 earliest=0 sourcetype="aws:cloudtrail" AKIAJOGCDXJ5NW5PXUPA</p>
+<p>The name of the resource is found in the <em>errorMessage</em> field.</p>
+<h3>
+<a id="challenge-222" class="anchor" href="#challenge-222" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 222:</h3>
+<p><em><strong>Using the leaked key, the adversary makes an unauthorized attempt to describe an account. What is the full user agent string of the application that originated the request?</strong></em></p>
+<p>I once again add the leaked key to the search. I recalled seeing an event name called <em>getUser</em>, which I thought might help because we are looking for the user agent string, so I add that to the search as well.</p>
+<p><code>index=botsv3 earliest=0 sourcetype="aws:cloudtrail" AKIAJOGCDXJ5NW5PXUPA eventName=getUser</code></p>
+<p>The answer is in the <em>userAgent</em> field.</p>
+<h3>
+<a id="challenge-301-1" class="anchor" href="#challenge-301-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 301:</h3>
+<p><em><strong>What external client IP address is able to initiate successful logins to Frothly using an expired user account?</strong></em></p>
+<p>For this question, I started by search the a keyword, <em>expired</em>.</p>
+<p><code>index=botsv3 earliest=0 expired</code></p>
+<p>I found that the  <em>ms:aad:signin</em>, had a single event. I figured this might be relevant because the question was asking about logins/signins. The answer is in the <em>ipAddress</em> field of that single event.</p>
+<h3>
+<a id="challenge-303" class="anchor" href="#challenge-303" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 303:</h3>
+<p><em><strong>What is the password for the user that was successfully created by the user "root" on the on-premises Linux system?</strong></em></p>
+<p>I had to recall the power shell commands I learned a while back for this question. I remember that <em>adduser</em> creates a user, so I decided to search for <em>adduser</em> and <em>root</em>.</p>
+<p><code>index=botsv3 earliest=0 adduser root</code></p>
+<p>The password is in one of the resulting event fields. Hint: the field has to do with passwords LoL</p>
+<h3>
+<a id="challenge-305" class="anchor" href="#challenge-305" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 305:</h3>
+<p><em><strong>What is the process ID of the process listening on a "leet" port?</strong></em></p>
+<p>I had no idea what a “leet port” was, so I searched it up on Google. The number <em>1337</em> popped up so I added that to my search.</p>
+<p><code>index=botsv3 earliest=0 1337</code></p>
+<p>I found the answer in the <em>columns.pid</em> event field.</p>
 
       <footer class="site-footer">
 
