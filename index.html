@@ -1,22 +1,32 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html>
   <head>
-    <meta charset="UTF-8">
-    <title>Sudo-morpheus.GitHub.io by Sudo-Morpheus</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
-  </head>
-  <body>
-    <section class="page-header">
-      <h1 class="project-name">Sudo-morpheus.GitHub.io</h1>
-      <h2 class="project-tagline">July CTF writeups</h2>
-    </section>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
 
-    <section class="main-content">
-      <h1>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <title>Sudo-morpheus.GitHub.io by Sudo-Morpheus</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Sudo-morpheus.GitHub.io</h1>
+        <h2>July CTF writeups</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/Sudo-Morpheus" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1>
 <a id="splunk-botsv2-write-ups" class="anchor" href="#splunk-botsv2-write-ups" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Splunk Botsv2 Write-Ups</h1>
 <h3>
 <a id="challenge-1" class="anchor" href="#challenge-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 1:</h3>
@@ -161,35 +171,187 @@ Again, we’re looking for a cross-site scripting attack. You can search for eve
 Because you are looking for a phone number, you need to use the Identity Center dashboard on Splunk. The Identity Center contains data with account names and other personal information about each identity. The Identity Center uses key=value pairs to filter, so you can do that to search for Mallory.
 Search for Mallory’s username to find her phone number. Hint: You can use the * wildcard to search for anything containing a word, ex: "<em>Mallory</em>" or "<em>krauesen</em>".</p>
 <h1>
-<a id="splunk-botsv3-write-ups" class="anchor" href="#splunk-botsv3-write-ups" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Splunk Botsv3 Write-Ups</h1>
+<a id="splunk-botsv2-write-ups-1" class="anchor" href="#splunk-botsv2-write-ups-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Splunk Botsv2 Write-Ups</h1>
 <h3>
 <a id="challenge-1-1" class="anchor" href="#challenge-1-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 1:</h3>
 <p><em><strong>This is a simple question to get you familiar with submitting answers. What is the name of the company that makes the software that you are using for this competition? Answer guidance: A six-letter word with no punctuation.</strong></em></p>
-<p>The name of the website that we are using to search for the answers.</p>
+<p>Look at the title of this section or the website you’re using to search.</p>
+<h3>
+<a id="challenge-100-1" class="anchor" href="#challenge-100-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 100:</h3>
+<p><em><strong>Amber Turing was hoping for Frothly to be acquired by a potential competitor which fell through, but visited their website to find contact information for their executive team. What is the website domain that she visited? Answer guidance: Do not provide the FQDN. Answer example: google.com</strong></em></p>
+<p>Typically, the best way to start on a challenge if you don’t know how to start is to do a general search. Search through the index for any mention of Amber Turing:</p>
+<p><code>index=botsv2 amber</code></p>
+<p>This doesn’t narrow our search up much. However, if you look at the fields on the left, you will see a src_user field. We see both computer users and email addresses. One such email address is Amber’s: <a href="mailto:aturing@froth.ly">aturing@froth.ly</a>. Lets try sorting by emails from Amber Turing to see if we can find any hints. Click on her email to sort for only her email.</p>
+<p>Looking back at the question, we see a mention of an acquisition falling through. You can search through her emails for hints about an acquisition:</p>
+<p><code>index=botsv2 src_user=”Amber Turing &lt;aturing@froth.ly&gt;” acquisition</code></p>
+<p>This should bring up only one event! Look through the content of the email and you will see discussion about an acquisition falling through. Look at the domain of the email address she sent this email to. This should be the website of the answer.</p>
+<p>Just to double check, the question tells us that she visited a website, which leads us to believe it will be http traffic. You can sort only http traffic with the search query sourcetype=”stream:http”. Then, you can search for the domain we found in the email. Checking the url field, we sure enough see visits to the website from this domain. The website is the answer.</p>
+<h3>
+<a id="challenge-101-1" class="anchor" href="#challenge-101-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 101:</h3>
+<p><em><strong>Amber found the executive contact information and sent him an email. What is the CEO's name? Provide the first and last name.</strong></em></p>
+<p>Refer to the answer of Challenge 101. In that write-up, we found the email in question by searching for emails from Amber that mentioned an acquisition:</p>
+<p><code>index=botsv2 src_user=”Amber Turing &lt;aturing@froth.ly&gt;” acquisition</code></p>
+<p>You should find one email from Amber that mentions an acquisition. From there, there are many ways to find the receiver of the email. Hint: There is a field that has both receiver and email in the title - you can find it on the left side. You can also look through the content of the email until you find the receiver email.</p>
+<h3>
+<a id="challenge-102-1" class="anchor" href="#challenge-102-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 102:</h3>
+<p><em><strong>After the initial contact with the CEO, Amber contacted another employee at this competitor. What is that employee's email address?</strong></em></p>
+<p>In the answer to Challenge 100, we found the domain of emails at the competitor company. All we have to do is search for emails from Amber to someone with that domain.</p>
+<p>We can do this with the following search query, replacing  with the domain you find in Challenge 100:</p>
+<p><code>index=botsv2 src_user="Amber Turing &lt;aturing@froth.ly&gt;" receiver_email{}=*@&lt;domain&gt;</code></p>
+<p>Hint: The “*” is very useful for many challenges. It is a wildcard that will match anything. Therefore, we are searching for any email from Amber to an email that ends with @. The * will match anything, so there can be anything at the beginning of the email.</p>
+<p>On the left side, find the receiver_email{} field to find emails from berkbeer.com that have been contacted by Amber. One was already used as the answer to Challenge 101, so the other is the answer to this question.</p>
+<h3>
+<a id="challenge-103-1" class="anchor" href="#challenge-103-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 103:</h3>
+<p><em><strong>What is the name of the file attachment that Amber sent to a contact at the competitor?</strong></em></p>
+<p>You’re still looking for emails from Amber to contacts at the competitor, so keep the search query from Challenge 102 open. Hint: If you already closed it, you can just open it again by going  back to the main search page and looking through your search history. This time, we are looking for a file attachment.</p>
+<p>Luckily, splunk automatically extracts fields for file attachments in emails. Looking through the interesting fields on the left, try to find a field name that would describe a filename. There should be only one value for that field in this query, and that is the name of the file you’re looking for.</p>
+<h3>
+<a id="challenge-104-1" class="anchor" href="#challenge-104-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 104:</h3>
+<p><em><strong>What is Amber's personal email address?</strong></em></p>
+<p>This one was slightly harder. In previous challenges, we looked only for emails from Amber to the competitors. Now, let’s look for the full conversation between Amber and the competitor we found in Challenge 102.</p>
+<p>To do so, lets do the following search:</p>
+<p><code>index=botsv2 sourcetype="stream:smtp" "aturing@froth.ly" “Answer from Challenge 102"</code></p>
+<p>Replace Answer from Challenge 2 with the email you found in Challenge 102. Sourcetype=”stream:smtp” is a new sourcetype. Smtp is a protocol used for emails, and by sorting by this sourcetype, we will search for only emails. Then, we include the email of both amber and the competitor to find all emails between the two.
+Let’s read through the content of the emails by expanding content_body for each of the two emails Amber sent to the competitors. In one of the emails, we find exactly what we are looking for:</p>
+<p>The competitor requests Amber’s personal email. Now, let’s look at the other event to see Amber’s response. Opening the content body of the other event, it all looks like gibberish. Now, we have to use cryptography skills to read the email.</p>
+<p>Try looking through the content of the email to detect what the message is encrypted with. Hint: It is an encoding scheme that represents binary data as an ASCII string with a radix-64 representation. Use an online decoder to decode the message, and it will include Amber’s personal email address.</p>
+<h3>
+<a id="challenge-105-1" class="anchor" href="#challenge-105-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 105:</h3>
+<p><em><strong>What version of TOR did Amber install to obfuscate her web browsing? Answer guidance: Numeric with one or more delimiter.</strong></em></p>
+<p>First, lets try to figure out how a TOR installation file will usually look. Go to the tor download page, and you will see that tor download files for windows have the following name: torbrowser-install-win64-9.5.1_en-US.exe. The 9.5.1 in that name looks like the filename.</p>
+<p>Therefore, we want to look for a string that contains “torbrowser” and “install” (we don’t know for sure that it will be a windows or US installation). We should also search for amber to narrow down to the user mentioned in the question.</p>
+<p>This is easy enough to search:</p>
+<p><code>index=botsv2 torbrowser install amber</code></p>
+<p>Looking through the first few events, you’ll see a filesystem path that ends with a file that looks just like the tor installation file:</p>
+<p><code>C:\Users\amber.turing\Downloads\torbrowser-install-&lt;x.x.x&gt;_en-US.exe</code></p>
+<p>Look for the &lt;x.x.x&gt; in that file, which represents the version.</p>
 <h3>
 <a id="challenge-200-1" class="anchor" href="#challenge-200-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 200:</h3>
+<p><em><strong>What is the public IPv4 address of the server running <a href="http://www.brewertalk.com">www.brewertalk.com</a>?</strong></em></p>
+<p>We want to find the public ipv4 address of a domain. The easiest way to do this is with DNS. As you might know, DNS is a service that returns the public ip address for an internet domain name.</p>
+<p>We can look for dns events by searching for sourcetype=”stream:dns”. We should also search for the internet domain “www.brewertalk.com”:</p>
+<p><code>index=”botsv2” “www.brewertalk.com” sourcetype=”stream:dns” </code></p>
+<p>The answer field shows the public ip address that DNS servers send back, and is the corresponding public ipv4 address for the server running <a href="http://www.brewertalk.com">www.brewertalk.com</a>.</p>
+<h3>
+<a id="challenge-201-1" class="anchor" href="#challenge-201-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 201:</h3>
+<p><em><strong>Provide the IP address of the system used to run a web vulnerability scan against <a href="http://www.brewertalk.com">www.brewertalk.com</a>.</strong></em></p>
+<p>First, we need to understand how web vulnerability scanners work. Typically, they will check for common web vulnerabilities, including searching for hidden web directories. This is probably the best way to detect the vulnerability scanner.</p>
+<p>Because vulnerability scanners check for web directories, they will try to access a lot of pages/directories, meaning that there will be a lot of 404 errors. We can look for just http connections that resulted in 404 errors using sourcetype=”stream:http” status=404. We should also search for the domain that is being scanned:</p>
+<p><code>index=botsv2 sourcetype=stream:http status=404 www.brewertalk.com</code></p>
+<p>Looking at the src_ip field to find the ip address from which the scanning is taking place, we see that almost half of all 404 errors come from a single ip address. That is the ip address of the system running the scan.</p>
+<h3>
+<a id="challenge-202-1" class="anchor" href="#challenge-202-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 202:</h3>
+<p><em><strong>The IP address from question 201 is also being used by a likely different piece of software to attack a URI path. What is the URI path? Answer guidance: Include the leading forward slash in your answer. Do not include the query string or other parts of the URI. Answer example: /phpinfo.php</strong></em></p>
+<p>Let’s investigate the URI paths being attacked from that IP address. This information is stored in the uri_path field. The URI path refers to the subpath, instead of the whole URL. The simplest way to do this is simply to search for all traffic that contains the ip address from challenge 201, and filter by traffic that contains a uri_path field:</p>
+<p><code>index=botsv2 “ip address from challenge 201” uri_path=*</code></p>
+<p>Looking at the field info at the left, click on the uri_path. From there, you can see the most common uri path that is being attacked from the ip address.</p>
+<h3>
+<a id="challenge-203-1" class="anchor" href="#challenge-203-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 203:</h3>
+<p><em><strong>What SQL function is being abused on the uri path from question 202?</strong></em></p>
+<p>Continuing on from the previous challenge, click on the most common uri_path to filter by it. This should narrow down to 1785 events, in which the ip address from challenge 201 attacked the URI path from challenge 202.</p>
+<p>Looking at the method field, we can see that all of these attacks are using the POST request method. To figure out what SQL function is being abused, we should take a look at what is being sent. For POST requests, this is captured in the form_data field.</p>
+<p>Look through the form_data for the first event. Reading through the form_data, you can observe a characteristic SQL injection, where keywords such as SUBSTRING, SELECT, ORDER BY, and FROM are used. What function are they wrapped in?</p>
+<h3>
+<a id="challenge-204-1" class="anchor" href="#challenge-204-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 204:</h3>
+<p><em><strong>What is Frank Ester’s password salt value on <a href="http://www.brewertalk.com">http://www.brewertalk.com</a>?</strong></em></p>
+<p>Let’s assume that the ip address from Challenge 201 had captured Frank Ester’s password salt. First, lets do a general search for Frank in the context of the ip address from Challenge 201:</p>
+<p><code>index=”botsv2” *frank* “ip address from challenge 201”</code></p>
+<p>This returns only two events! Looking for an email, you should see an SQL XPATH syntax error on the email <a href="mailto:frankesters47@gmail.com">frankesters47@gmail.com</a>. Let’s assume this was part of the sql injection attack.</p>
+<p>In order to observe what is happening during the account, lets narrow events down to the time of the XPATH syntax error. Go to the event with the SQL error and click on the time. Click apply at the bottom of the popup to see nearby events within a 5 second timespan. Then, we want to see all POST data and responses that happened during this time as part of the attack, in chronological order.</p>
+<p>We can do this by filtering for http traffic by the ip address from challenge 201 and the uri path in challenge 202:</p>
+<p><code>index=”botsv2” sourcetype=”stream:http” uri_path=”challenge 202 answer” “challenge 201 answer” | reverse | table dest_content</code></p>
+<p>Notice the extra two pipes (|) at the end of the command. The reverse command reverses the order of events, so that they are displayed in chronological order. The “table dest_content” section will just show the server’s response, which is where the salt will be returned after the sql injection.</p>
+<p>Use ctrl-f to search for “XPATH syntax error” (which we saw in the original error with frank’s email).  Scrolling through the events, look for the results from the server next to a XPATH syntax error. Look for a string that is approximately 5-10 characters long, which should be the salt.</p>
+<h3>
+<a id="challenge-205-1" class="anchor" href="#challenge-205-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 205:</h3>
+<p><em><strong>What is user btun’s password on brewertalk.com?</strong></em></p>
+<p>Start out similarly to challenge 204. Start by searching for http traffic from the ip address from challenge 201 with a uri_path field value of the uri path from challenge 202. Also add btun at the end of the search to search for the attack on user btun.</p>
+<p>Again, click on time to look for events within 5 seconds and remove btun from the search to see all traffic from the attacking machine. Again, search for:</p>
+<p><code>index=”botsv2” sourcetype=”stream:http” uri_path=”challenge 202 answer” “challenge 201 answer” | reverse | table dest_content</code></p>
+<p>in order to see the responses from the server to the sql injection. Searching again for XPATH syntax error with ctrl-f, look for btun. Then, you will see the salt and password hash in the next few responses.</p>
+<p>Now, you have to crack the password hash. Try looking up the top_1000.csv file to find common hashes.</p>
+<h3>
+<a id="challenge-206-1" class="anchor" href="#challenge-206-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 206:</h3>
+<p><em><strong>What are the characters displayed by the XSS probe? Answer guidance: Submit answer in native language or character set.</strong></em></p>
+<p>To answer this, we have to know something about XSS attacks. Typically, XSS attacks will include some kind of &lt;script&gt; in order to send the script. Let’s search for http data that contains the &lt;script&gt; tag:</p>
+<p><code>index=botsv2 “&lt;script&gt;” sourcetype=”stream:http”</code></p>
+<p>This returns a lot of events, so lets do some more filtering. Cross-site scripting typically goes through a post request, so let’s search for unique POST request data, which is stored in the form_data field. The dedup command comes in handy - it searches for unique values of something. Lets add this to our last query:</p>
+<p><code>| dedup form_data</code></p>
+<p>Now, there are only 3 results! All that’s left is to read the form data and look for special characters. The form_data is URL-encoded, which can automatically be done in splunk by adding this to the search query:</p>
+<p><code>| eval data=urldecode(form_data) | table data</code></p>
+<p>Out of the 3 urldecoded results, look for the one with the special characters.</p>
+<h3>
+<a id="challenge-207-1" class="anchor" href="#challenge-207-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 207:</h3>
+<p><em><strong>What was the value of the cookie that Kevin’s browser transmitted to the malicious URL as part of a XSS attack? Answer guidance: All digits. Not the cookie name or symbols like an equal sign.
+Again, we’re looking for a cross-site scripting attack. You can search for events in the stream:http sourcetype that contain both &lt;script&gt; (for a XSS attack) and kevin.</strong></em></p>
+<p>You should find only 1 event. The question asks for the value of the cookie, so look in the cookies field.  You can find the value of the cookie there, which is the correct answer.</p>
+<h3>
+<a id="challenge-208-1" class="anchor" href="#challenge-208-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 208:</h3>
+<p><em><strong>The brewertalk.com web site employed Cross Site Request Forgery (CSRF) techniques. What was the value of the anti-CSRF token that was stolen from Kevin Lagerfield’s computer and used to help create an unauthorized admin user on brewertalk.com?</strong></em></p>
+<p>First, make sure you know how anti-CSRF tokens work. Learn more about the structure of CSRF tokens here: <a href="https://www.netsparker.com/blog/web-security/protecting-website-using-anti-csrf-token/">https://www.netsparker.com/blog/web-security/protecting-website-using-anti-csrf-token/</a>.</p>
+<p>The anti CSRF token is stolen from Kevin’s computer. The first thing that comes to mind for stealing something from Kevin’s computer is the XSS attack we investigated in the last two challenges. Keep the previous query open from challenge 207 that had the XSS attack on kevin. We will use this to find the time at which the CSRF token was stolen.</p>
+<p>Click on the time field in the left and click Apply under Nearby Events to search for all events that occurred in a 5 second timeframe of the XSS attack. Now, we have to search for the CSRF token. If you read through the link above, you would find the format that CSRF tokens are stored through in a html input tag with a specific type. Figure out what that input type is and search for <code>&lt;input type=”&lt;type&gt;”</code>  to find the CSRF token.</p>
+<h3>
+<a id="challenge-209-1" class="anchor" href="#challenge-209-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 209:</h3>
+<p><em><strong>What brewertalk.com username was maliciously created by a spearphishing attack?</strong></em></p>
+<p>Let’s take a look at what is done with the CSRF token in the previous challenge. Look for http traffic that contains the csrf token (with the same time frame of the xss attack that we used in the previous challenge:</p>
+<p><code>index=botsv2 “csrf token from challenge 208” sourcetype=”stream:http” | reverse</code></p>
+<p>Remember, reverse will show us what happens in chronological order. Look at the form_data of the POST request that is returned. Look closely at usernames being used, checking for any usernames that look correct, but may have a single letter that uses a different case and is thus used as part of the spear phishing attack to trick people.</p>
+<h3>
+<a id="challenge-300-1" class="anchor" href="#challenge-300-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 300:</h3>
+<p><em><strong>According to Frothly’s records, what is the likely MAC address of Mallory’s corporate MacBook? Answer guidance: Her corporate MacBook has the hostname MACLORY-AIR13.</strong></em></p>
+<p>You can use the Asset Center dashboard on Splunk to solve this challenge. The asset center allows you to search through asset data, which is basically a list of information (such as the MAC address, in our case).</p>
+<p>Navigate to the Asset Center dashboard. First, identify the Asset lookup fields you are interested in. You can find a list of fields here: <a href="https://docs.splunk.com/Documentation/UBA/5.0.3/GetDataIn/IdentifyAssets">https://docs.splunk.com/Documentation/UBA/5.0.3/GetDataIn/IdentifyAssets</a></p>
+<p>Hint: Look at the question to find the fields you need. You need a field that will contain the hostname so you can search for Mallory’s MacBook, and a field for the answer, which is the MAC address.</p>
+<p>Once you find the fields you need, perform a lookup for those fields through the Asset Center.</p>
+<h3>
+<a id="challenge-301-1" class="anchor" href="#challenge-301-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 301:</h3>
+<p><em><strong>What episode of Game of Thrones is Mallory excited to watch? Answer guidance: Submit the HBO title of the episode.</strong></em></p>
+<p>You can do a general search for Game of Thrones and Mallory. Hint: You may need to search for an acronym.</p>
+<p>You should see 4 resulting smtp events. SMTP events are usually emails. Look through the fields on the left to gather information. Check the receiver or sender fields to make sure that Mallory is one of the receiver/senders. Make sure to look through all fields that may have content, including the content field and other fields such as file attachment info. You will find mention of a Game of Thrones episode number. Use your favorite search engine to look up the episode on HBO, and submit the title.</p>
+<h3>
+<a id="challenge-302-1" class="anchor" href="#challenge-302-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 302:</h3>
+<p><em><strong>What is Mallory Krauesen’s phone number? Answer guidance: ddd-ddd-dddd where d=[0-9]. No country code.</strong></em></p>
+<p>Because you are looking for a phone number, you need to use the Identity Center dashboard on Splunk. The Identity Center contains data with account names and other personal information about each identity. The Identity Center uses key=value pairs to filter, so you can do that to search for Mallory.
+Search for Mallory’s username to find her phone number. Hint: You can use the * wildcard to search for anything containing a word, ex: "<em>Mallory</em>" or "<em>krauesen</em>".</p>
+<h3>
+<a id="challenge-303" class="anchor" href="#challenge-303" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 303:</h3>
+<p><em><strong>Enterprise Security contains a threat list notable event for MACLORY-AIR13 and suspect IP address 5.39.93.112. What is the name of the threatlist (i.e. Threat Group) that is triggering the notable?</strong></em></p>
+<p>Information about Threat Groups and notable events are stored in the Incident Review dashboard within splunk. Search for Mallory’s MacBook with the given hostname and look for threat activity.</p>
+<h3>
+<a id="challenge-304" class="anchor" href="#challenge-304" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 304:</h3>
+<p><em><strong>Considering the threatlist you found in the question above, and related data, what protocol often used for file transfer is actually responsible for the generated traffic?</strong></em></p>
+<p>The previous challenge gives us the suspected IP address. All we have to do is search for that ip address. Looking at the interesting fields on the left, what is the app the ip address is using?</p>
+<h1>
+<a id="splunk-botsv3-write-ups" class="anchor" href="#splunk-botsv3-write-ups" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Splunk Botsv3 Write-Ups</h1>
+<h3>
+<a id="challenge-1-2" class="anchor" href="#challenge-1-2" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 1:</h3>
+<p><em><strong>This is a simple question to get you familiar with submitting answers. What is the name of the company that makes the software that you are using for this competition? Answer guidance: A six-letter word with no punctuation.</strong></em></p>
+<p>The name of the website that we are using to search for the answers.</p>
+<h3>
+<a id="challenge-200-2" class="anchor" href="#challenge-200-2" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 200:</h3>
 <p><em><strong>List out the IAM users that accessed an AWS service (successfully or unsuccessfully) in Frothly's AWS environment? Answer guidance: Comma separated without spaces, in alphabetical order. (Example: ajackson,mjones,tmiller)</strong></em></p>
 <p>I wasn’t familiar with any key terms, so I searched for <em>AWS IAM users splunk</em> on Google. The search results indicated I should use <em>aws:cloudtrail</em> as the sourcetype for the search.</p>
 <p><code>index=“botsv3” earliest=0 sourcetype=“aws:cloudtrail"</code></p>
 <p>I started scrolling through the resulting fields to find “user” or “username.” I found a field called <em>userIdentity.userName</em>, which contains the users we were looking for.</p>
 <h3>
-<a id="challenge-201-1" class="anchor" href="#challenge-201-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 201:</h3>
+<a id="challenge-201-2" class="anchor" href="#challenge-201-2" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 201:</h3>
 <p><em><strong>What field would you use to alert that AWS API activity have occurred without MFA (multi-factor authentication)? Answer guidance: Provide the full JSON path. (Example: iceCream.flavors.traditional)</strong></em></p>
 <p>I searched the key term, <em>mfa</em>. And since this scenario was similar to the previous question, I kept the sourcetype the same.</p>
 <p><code>index=“botsv3” earliest=0 sourcetype=“aws:cloudtrail” *mfa*</code></p>
 <p>The answer is among the resulting fields. Hint: It is related to mfa authentication.</p>
 <h3>
-<a id="challenge-203-1" class="anchor" href="#challenge-203-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 203:</h3>
+<a id="challenge-203-2" class="anchor" href="#challenge-203-2" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 203:</h3>
 <p><em><strong>Bud accidentally makes an S3 bucket publicly accessible. What is the event ID of the API 2call that enabled public access? Answer guidance: Include any special characters/punctuation.</strong></em></p>
 <p>My first course of action was to find Bud’s account. I assumed it was either <em>bstoll</em> -&gt; “Bud Stoll” or <em>btun</em> -&gt; “Bud Tun”. After searching “Bud Stoll,” I confirmed his account was <em>bstoll</em>. Next, I had to find an event that would result in changing the accessibility of a bucket. I recalled <em>put events</em> were events that changed policies.</p>
 <p><code>index=“botsv3” earliest=0 bstoll eventName=put*</code></p>
 <p>The answer is one of the two resulting event IDs in the <em>eventID</em> field.</p>
 <h3>
-<a id="challenge-204-1" class="anchor" href="#challenge-204-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 204:</h3>
+<a id="challenge-204-2" class="anchor" href="#challenge-204-2" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 204:</h3>
 <p><em><strong>What is the name of the S3 bucket that was made publicly accessible?</strong></em></p>
 <p>We already have the information needed thanks to the previous question. The answer is in the <em>requestParameters.bucketName</em> field.</p>
 <h3>
-<a id="challenge-205-1" class="anchor" href="#challenge-205-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 205:</h3>
+<a id="challenge-205-2" class="anchor" href="#challenge-205-2" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 205:</h3>
 <p><em><strong>What is the name of the text file that was successfully uploaded into the S3 bucket while it was publicly accessible? Answer guidance: Provide just the file name and extension, not the full path. (Example: filename.docx instead of /mylogs/web/filename.docx)</strong></em></p>
 <p>Now that we know the bucket name, we can add that to the search along with the key word <em>.txt</em> for text files.</p>
 <p><code>index="botsv3" earliest=0 frothlywebcode *txt*</code></p>
@@ -217,13 +379,13 @@ Search for Mallory’s username to find her phone number. Hint: You can use the 
 <p><code>index=botsv3 earliest=0 sourcetype="aws:cloudtrail" AKIAJOGCDXJ5NW5PXUPA eventName=getUser</code></p>
 <p>The answer is in the <em>userAgent</em> field.</p>
 <h3>
-<a id="challenge-301-1" class="anchor" href="#challenge-301-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 301:</h3>
+<a id="challenge-301-2" class="anchor" href="#challenge-301-2" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 301:</h3>
 <p><em><strong>What external client IP address is able to initiate successful logins to Frothly using an expired user account?</strong></em></p>
 <p>For this question, I started by search the a keyword, <em>expired</em>.</p>
 <p><code>index=botsv3 earliest=0 expired</code></p>
 <p>I found that the  <em>ms:aad:signin</em>, had a single event. I figured this might be relevant because the question was asking about logins/signins. The answer is in the <em>ipAddress</em> field of that single event.</p>
 <h3>
-<a id="challenge-303" class="anchor" href="#challenge-303" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 303:</h3>
+<a id="challenge-303-1" class="anchor" href="#challenge-303-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 303:</h3>
 <p><em><strong>What is the password for the user that was successfully created by the user "root" on the on-premises Linux system?</strong></em></p>
 <p>I had to recall the power shell commands I learned a while back for this question. I remember that <em>adduser</em> creates a user, so I decided to search for <em>adduser</em> and <em>root</em>.</p>
 <p><code>index=botsv3 earliest=0 adduser root</code></p>
@@ -234,14 +396,9 @@ Search for Mallory’s username to find her phone number. Hint: You can use the 
 <p>I had no idea what a “leet port” was, so I searched it up on Google. The number <em>1337</em> popped up so I added that to my search.</p>
 <p><code>index=botsv3 earliest=0 1337</code></p>
 <p>I found the answer in the <em>columns.pid</em> event field.</p>
+      </section>
+    </div>
 
-      <footer class="site-footer">
-
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
-      </footer>
-
-    </section>
-
-  
+    
   </body>
 </html>
