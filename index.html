@@ -198,7 +198,7 @@ Search for Mallory’s username to find her phone number. Hint: You can use the 
 <a id="challenge-219" class="anchor" href="#challenge-219" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 219:</h3>
 <p><em><strong>Bud accidentally commits AWS access keys to an external code repository. Shortly after, he receives a notification from AWS that the account had been compromised. What is the support case ID that Amazon opens on his behalf?</strong></em></p>
 <p>Because Bud receives a notification from AWS, I decided to search for an email from Amazon. I also decided to search a keyword, <em>access keys</em>.</p>
-<p>index="botsv3" earliest=0 sourcetype=”stream:smtp” access keys</p>
+<p><code>index="botsv3" earliest=0 sourcetype=”stream:smtp” access keys</code></p>
 <p>As I was scrolling through the fields, I found one called <em>content body</em>, which contained the email amazon sent and the answer we are looking for.</p>
 <h3>
 <a id="challenge-220" class="anchor" href="#challenge-220" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 220:</h3>
@@ -208,7 +208,7 @@ Search for Mallory’s username to find her phone number. Hint: You can use the 
 <a id="challenge-221" class="anchor" href="#challenge-221" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 221:</h3>
 <p><em><strong>Using the leaked key, the adversary makes an unauthorized attempt to create a key for a specific resource. What is the name of that resource? Answer guidance: One word.</strong></em></p>
 <p>Once again, the answer from the previous question helped me search for the answer to this question. I add the leaked access key that I found to the search.</p>
-<p>index=botsv3 earliest=0 sourcetype="aws:cloudtrail" AKIAJOGCDXJ5NW5PXUPA</p>
+<p><code>index=botsv3 earliest=0 sourcetype="aws:cloudtrail" AKIAJOGCDXJ5NW5PXUPA</code></p>
 <p>The name of the resource is found in the <em>errorMessage</em> field.</p>
 <h3>
 <a id="challenge-222" class="anchor" href="#challenge-222" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Challenge 222:</h3>
